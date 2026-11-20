@@ -3,3 +3,6 @@ vendor/
 node_modules/
 .next/
 .env.local
+.dart_tool/
+build/
+.flutter-plugins*

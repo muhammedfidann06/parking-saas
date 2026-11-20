@@ -14,6 +14,18 @@ class ParkingSessionController extends Controller
 {
     public function __construct(private PricingService $pricing) {}
 
+    // Aktive Parkzeiten vom eingeloggten Benutzer (für die Mobile-App).
+    public function active(Request $request): JsonResponse
+    {
+        $sessions = ParkingSession::with('lot:id,name')
+            ->where('user_id', $request->user()->id)
+            ->whereNull('ended_at')
+            ->latest('started_at')
+            ->get();
+
+        return response()->json($sessions);
+    }
+
     // Parken starten (Check-in).
     public function start(Request $request): JsonResponse
     {

@@ -27,6 +27,20 @@ jobs:
         working-directory: app
         run: php artisan test
 
+  mobile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze --no-fatal-infos
+      - run: flutter test
+
   frontend:
     runs-on: ubuntu-latest
     defaults:

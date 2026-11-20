@@ -19,6 +19,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <header className="header">
           {branding.logo_url && <img src={branding.logo_url} alt="" height={32} />}
           <h1>{branding.name}</h1>
+          <a href="/login" style={{ marginLeft: "auto", color: "#fff" }}>Login</a>
         </header>
         <main className="container">{children}</main>
       </body>

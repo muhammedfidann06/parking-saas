@@ -51,6 +51,11 @@ async function request<T>(tenant: string, path: string, init: RequestInit = {}, 
 }
 
 export const api = {
+  login: (tenant: string, email: string, password: string) =>
+    request<{ token: string; user: { id: number; name: string; role: string } }>(tenant, "/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password, device_name: "web" }),
+    }),
   branding: (tenant: string) => request<Branding>(tenant, "/branding"),
   lots: (tenant: string) => request<Lot[]>(tenant, "/lots"),
   startSession: (tenant: string, token: string, lotId: number, plate: string) =>
