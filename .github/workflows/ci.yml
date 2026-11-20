@@ -17,7 +17,8 @@ jobs:
           cd app
           php artisan install:api --without-migration-prompt --no-interaction
           cp -r ../backend/. .
-          sed -i 's/App\\Providers\\AppServiceProvider::class,/App\\Providers\\AppServiceProvider::class,\n    App\\Providers\\TenancyServiceProvider::class,/' bootstrap/providers.php
+          # Register our TenancyServiceProvider (works for any Laravel version that has bootstrap/providers.php)
+          php -r '$f = "bootstrap/providers.php"; $p = require $f; $p[] = "App\\Providers\\TenancyServiceProvider"; $p = array_unique($p); file_put_contents($f, "<?php\n\nreturn [\n" . implode("", array_map(fn ($c) => "    " . $c . "::class,\n", $p)) . "];\n");'
           cat bootstrap/providers.php
       - name: Migrate + seed demo data
         working-directory: app
