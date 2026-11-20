@@ -2,7 +2,6 @@
 
 A multi-tenant parking platform: every customer (city, company, garage operator) gets its own
 subdomain, branding and isolated data. **Laravel 11** API + **Next.js 15** (React 19) frontend.
-Code comments are in **German (A2 level)**.
 
 ## Features
 - **Multi-tenancy (single DB):** tenant resolved from subdomain or `X-Tenant` header;

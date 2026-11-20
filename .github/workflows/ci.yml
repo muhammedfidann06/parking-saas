@@ -1,0 +1,40 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_sqlite, sqlite3
+      - name: Create a fresh Laravel 11 app and add our code
+        run: |
+          composer create-project laravel/laravel:^11.0 app --no-interaction --prefer-dist
+          cd app
+          php artisan install:api --without-migration-prompt --no-interaction
+          cp -r ../backend/. .
+          sed -i 's/App\\Providers\\AppServiceProvider::class,/App\\Providers\\AppServiceProvider::class,\n    App\\Providers\\TenancyServiceProvider::class,/' bootstrap/providers.php
+          cat bootstrap/providers.php
+      - name: Migrate + seed demo data
+        working-directory: app
+        run: php artisan migrate:fresh --seed --seeder=DemoSeeder --force
+      - name: Run tests
+        working-directory: app
+        run: php artisan test
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run build

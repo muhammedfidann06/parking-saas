@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { api } from "@/lib/api";
 import { currentTenant } from "@/lib/tenant";
 import "./globals.css";
@@ -15,7 +15,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="de">
       {/* White-Label: Die Hauptfarbe kommt vom Kunden. */}
-      <body style={{ ["--brand" as string]: branding.primary_color }}>
+      <body style={{ "--brand": branding.primary_color } as CSSProperties}>
         <header className="header">
           {branding.logo_url && <img src={branding.logo_url} alt="" height={32} />}
           <h1>{branding.name}</h1>
