@@ -9,11 +9,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           extensions: pdo_sqlite, sqlite3
-      - name: Create a fresh Laravel 11 app and add our code
+      - name: Create a fresh Laravel app and add our code
         run: |
-          composer create-project laravel/laravel:^11.0 app --no-interaction --prefer-dist
+          composer create-project laravel/laravel app --no-interaction --prefer-dist
           cd app
           php artisan install:api --without-migration-prompt --no-interaction
           cp -r ../backend/. .

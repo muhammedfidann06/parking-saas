@@ -1,7 +1,7 @@
 # 🅿️ Parking SaaS – Multi-Tenant, White-Label
 
 A multi-tenant parking platform: every customer (city, company, garage operator) gets its own
-subdomain, branding and isolated data. **Laravel 11** API + **Next.js 15** (React 19) frontend.
+subdomain, branding and isolated data. **Laravel** API + **Next.js 15** (React 19) frontend.
 
 ## Features
 - **Multi-tenancy (single DB):** tenant resolved from subdomain or `X-Tenant` header;
@@ -25,7 +25,7 @@ Browser ── berlin.parking.app ──► Next.js (SSR: branding, lots)
 ## Setup
 ```bash
 # Backend
-composer create-project laravel/laravel backend-app
+composer create-project laravel/laravel backend-app   # PHP 8.3+
 cd backend-app && php artisan install:api      # installs Sanctum + routes/api.php
 # copy the files from ./backend over the new project, then register the provider:
 #   bootstrap/providers.php -> App\Providers\TenancyServiceProvider::class
