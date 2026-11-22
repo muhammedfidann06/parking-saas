@@ -67,3 +67,8 @@ flutter run --dart-define=API_URL=http://10.0.2.2:8000/api --dart-define=TENANT=
 
 ## Skills
 PHP · Laravel · REST API design · multi-tenant SaaS architecture · Flutter · Dart · Next.js · React · TypeScript · CI/CD
+
+## How this was built
+This project was created with the help of an AI coding assistant (Claude). I'm learning to program and use it to understand
+how the code works – the tests and the CI pipeline show that it runs correctly.
+*Dieses Projekt ist mit Hilfe eines KI-Assistenten entstanden; ich nutze es, um Programmieren zu lernen.*
