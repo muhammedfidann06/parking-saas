@@ -2,6 +2,10 @@
 
 [![ci](https://github.com/muhammedfidann06/parking-saas/actions/workflows/ci.yml/badge.svg)](https://github.com/muhammedfidann06/parking-saas/actions/workflows/ci.yml)
 
+**▶ Live demo:** https://muhammedfidann06.github.io/parking-saas/ – the Flutter app as a web app. GitHub Pages can't run PHP, so the demo uses an
+in-browser fake backend (`mobile/lib/demo_backend.dart`) with the same endpoints and pricing rules as the Laravel API.
+Login: `operator@berlin.test` / `password`.
+
 A multi-tenant parking platform: every customer (city, company, garage operator) gets its own
 subdomain, branding and isolated data. One backend, two clients:
 
@@ -62,7 +66,7 @@ flutter run --dart-define=API_URL=http://10.0.2.2:8000/api --dart-define=TENANT=
 
 ## Tests
 - Backend: pricing unit tests, tenant isolation, login and full parking flow (`php artisan test`)
-- Mobile: model/formatting unit tests, API client with `MockClient`, widget tests (`flutter test`)
+- Mobile: model/formatting unit tests, API client with `MockClient`, widget tests, demo backend tests (`flutter test`)
 - Web: production build with type checking (`npm run build`)
 
 ## Skills

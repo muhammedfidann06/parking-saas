@@ -2,6 +2,11 @@ name: ci
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   backend:
     runs-on: ubuntu-latest
@@ -40,6 +45,14 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos
       - run: flutter test
+      # Live-Demo: Flutter-Web mit Fake-Backend im Browser (GitHub Pages hat keinen PHP-Server)
+      - name: Build web demo
+        run: |
+          flutter create . --platforms=web --project-name parking_mobile
+          flutter build web --release --base-href /parking-saas/ --dart-define=DEMO=true
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: mobile/build/web
 
   frontend:
     runs-on: ubuntu-latest
@@ -53,3 +66,14 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [backend, mobile, frontend]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

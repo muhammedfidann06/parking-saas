@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api_client.dart';
+import 'demo_backend.dart';
 import 'models.dart';
 import 'screens/login_screen.dart';
 import 'screens/lots_screen.dart';
@@ -10,11 +11,19 @@ import 'screens/lots_screen.dart';
 // flutter run --dart-define=API_URL=http://10.0.2.2:8000/api --dart-define=TENANT=berlin
 const apiUrl = String.fromEnvironment('API_URL', defaultValue: 'http://10.0.2.2:8000/api');
 const tenantSlug = String.fromEnvironment('TENANT', defaultValue: 'berlin');
+// Live-Demo ohne Server: flutter build web --dart-define=DEMO=true
+const demoMode = bool.fromEnvironment('DEMO');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  final api = ApiClient(baseUrl: apiUrl, tenant: tenantSlug, token: prefs.getString('token'));
+  final api = ApiClient(
+    baseUrl: demoMode ? 'https://demo.local/api' : apiUrl,
+    tenant: tenantSlug,
+    // Im Demo-Modus beantwortet ein Fake-Backend im Browser alle Requests.
+    client: demoMode ? DemoBackend().client : null,
+    token: prefs.getString('token'),
+  );
 
   // White-Label: Name und Farbe kommen vom Server. Wenn der Server nicht da ist, nehmen wir Standardwerte.
   Branding? branding;
@@ -69,7 +78,15 @@ class _ParkingAppState extends State<ParkingApp> {
       darkTheme: ThemeData(colorSchemeSeed: seed, brightness: Brightness.dark, useMaterial3: true),
       home: _loggedIn
           ? LotsScreen(api: widget.api, title: b?.name ?? 'Parking', currency: b?.currency ?? 'EUR', onLogout: _onLogout)
-          : LoginScreen(api: widget.api, title: b?.name ?? 'Parking', onLogin: _onLogin),
+          : LoginScreen(
+              api: widget.api,
+              title: b?.name ?? 'Parking',
+              onLogin: _onLogin,
+              hint: demoMode
+                  ? 'Live-Demo ohne Server – Login: operator@$tenantSlug.test / password. '
+                      'Alle Daten bleiben im Browser; beim Preis zählt 1 Sekunde wie 1 Minute.'
+                  : null,
+            ),
     );
   }
 }

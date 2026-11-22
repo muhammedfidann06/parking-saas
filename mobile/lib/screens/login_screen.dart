@@ -7,8 +7,9 @@ class LoginScreen extends StatefulWidget {
   final ApiClient api;
   final String title;
   final Future<void> Function(String token) onLogin;
+  final String? hint; // z.B. Zugangsdaten für die Live-Demo
 
-  const LoginScreen({super.key, required this.api, required this.title, required this.onLogin});
+  const LoginScreen({super.key, required this.api, required this.title, required this.onLogin, this.hint});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -60,6 +61,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Icon(Icons.local_parking, size: 64, color: Theme.of(context).colorScheme.primary),
                   const SizedBox(height: 12),
                   Text(widget.title, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall),
+                  if (widget.hint != null) ...[
+                    const SizedBox(height: 16),
+                    Card(
+                      child: ListTile(leading: const Icon(Icons.info_outline), title: Text(widget.hint!)),
+                    ),
+                  ],
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _email,
